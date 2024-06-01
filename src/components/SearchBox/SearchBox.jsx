@@ -1,22 +1,33 @@
-import { useSelector, useDispatch } from 'react-redux';
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectNameFilter,
+  selectNumberFilter,
+} from "../../redux/filters/selectors";
+import { changeFilter, changeNumberFilter } from "../../redux/filters/slice";
 
-import { changeFilter, selectNameFilter } from '../../redux/filtersSlice';
+export default function SearchBox() {
+  const dispatch = useDispatch();
+  const nameFilter = useSelector(selectNameFilter);
+  const numberFilter = useSelector(selectNumberFilter);
 
-import css from './SearchBox.module.css';
+  const [searchValue, setSearchValue] = useState(nameFilter || numberFilter);
 
-const SearchBox = () => {
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchValue(value);
 
-    const dispatch = useDispatch();
-    const filter = useSelector(selectNameFilter);
-  
-    const handleFilterChange = (filter) => dispatch(changeFilter(filter));
-  
-    return (
-        <div className={css.searchBar}>
-            <p className={css.searchHint}>Find contacts by name</p>
-            <input className={css.searchInput} type="text" value={filter} onChange={(evt) => handleFilterChange(evt.target.value)} />
-        </div>
-  )
+    if (!isNaN(value) && value.trim() !== "") {
+      dispatch(changeNumberFilter(value));
+    } else {
+      dispatch(changeFilter(value));
+    }
+  };
+
+  return (
+    <div>
+      <p>Search by name or by phone</p>
+      <input type="text" value={searchValue} onChange={handleSearchChange} />
+    </div>
+  );
 }
-
-export default SearchBox

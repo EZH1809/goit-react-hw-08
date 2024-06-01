@@ -1,8 +1,7 @@
-.contactList{
-    list-style: none;
-    padding: 12px;
+.cardList{
+  
     display: flex;
+    gap: 10px;
     flex-wrap: wrap;
-    gap:12px;
-    margin-top: 24px;
+ 
 }
